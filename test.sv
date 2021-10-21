@@ -23,7 +23,38 @@ endclass
 
 class test_espec extends base_test;
     `uvm_component_utils(test_espec)
+
+    int width = 16;
+
+    function new(string name = "test_espec", uvm_component parent = null);
+        super.new(name, parent);
+    endfunction
+
     virtual function void run_phase(uvm_phase phase);
+        trans_especifica trans_especifica_inst = trans_especifica::type_id::create("trans_especifica_inst");
+        phase.raise_objection(this);
+
+        trans_especifica_inst.ret_spec = 3;
+        trans_especifica_inst.ret_spec = {width/4{4'h5}};
+        trans_especifica_inst.tpo_spec = escritura;
+        trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
         
+
+        trans_especifica_inst.ret_spec = 8;
+        trans_especifica_inst.dto_spec = 16'hA;
+        trans_especifica_inst.tpo_spec = escritura;
+        trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
+    
+        trans_especifica_inst.ret_spec = 10;
+        trans_especifica_inst.dto_spec = 16'hFF;
+        trans_especifica_inst.tpo_spec = escritura;
+        trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
+   
+        trans_especifica_inst.ret_spec = 10;
+        trans_especifica_inst.tpo_spec = lectura;
+        trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
+
+        #10000;
+        phase.drop_objection(this);
     endfunction
 endclass

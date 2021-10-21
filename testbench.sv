@@ -1,10 +1,11 @@
 `include "fifo.sv"
-`include "interface_transactions.sv"
+`include "interface.sv"
+`include "seq_item.sv"
+`include "sequence.sv"
 `include "driver.sv"
-`include "checker.sv"
-`include "score_board.sv"
 `include "agent.sv"
-`include "ambiente.sv"
+`include "scoreboard.sv"
+`include "env.sv"
 `include "test.sv"
 
 ///////////////////////////////////
