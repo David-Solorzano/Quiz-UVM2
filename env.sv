@@ -16,8 +16,8 @@ class env #(parameter width =16, parameter depth = 8) extends uvm_env;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        agent_inst = agent::type_id::create("agent_inst", this);
-        scoreboard_inst = scoreboard::type_id::create("scoreboard_inst", this);
+        agent_inst = agent#(.width(width),.depth(depth))::type_id::create("agent_inst", this);
+        scoreboard_inst = scoreboard#(.width(width),.depth(depth))::type_id::create("scoreboard_inst", this);
     endfunction
 
     virtual function void connect_phase(uvm_phase phase);
