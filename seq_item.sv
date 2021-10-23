@@ -4,10 +4,10 @@ typedef enum { lectura, escritura, reset} tipo_trans;
 class trans_fifo #(parameter width = 16) extends uvm_sequence_item;
 
   `uvm_object_utils_begin(trans_fifo)
-    `uvm_field_int(retardo, UVM_DEFAULT)
+    `uvm_field_int(retardo, UVM_DEFAULT|UVM_DEC)
     `uvm_field_enum(tipo_trans, tipo, UVM_DEFAULT)
 	  `uvm_field_int(dato, UVM_DEFAULT)
-    `uvm_field_int(tiempo, UVM_DEFAULT)
+    `uvm_field_int(tiempo, UVM_DEFAULT|UVM_DEC)
   `uvm_object_utils_end
 
   rand int retardo = 0; // tiempo de retardo en ciclos de reloj que se debe esperar antes de ejecutar la transacción
@@ -26,13 +26,13 @@ endclass
 class trans_sb #(parameter width=16) extends uvm_object;
   `uvm_object_utils_begin(trans_sb)
     `uvm_field_int(dato_enviado, UVM_DEFAULT)
-    `uvm_field_int(tiempo_push, UVM_DEFAULT)
-    `uvm_field_int(tiempo_pop, UVM_DEFAULT)
+    `uvm_field_int(tiempo_push, UVM_DEFAULT|UVM_DEC)
+    `uvm_field_int(tiempo_pop, UVM_DEFAULT|UVM_DEC)
     `uvm_field_int(completado, UVM_DEFAULT)
     `uvm_field_int(overflow, UVM_DEFAULT)
     `uvm_field_int(underflow, UVM_DEFAULT)
     `uvm_field_int(reset, UVM_DEFAULT)
-    `uvm_field_int(latencia, UVM_DEFAULT)
+    `uvm_field_int(latencia, UVM_DEFAULT|UVM_DEC)
   `uvm_object_utils_end
 
   function new(string name = "trans_sb");

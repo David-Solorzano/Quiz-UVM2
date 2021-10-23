@@ -58,7 +58,7 @@ class test_espec extends base_test;
         trans_especifica_inst.tpo_spec = lectura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
 
-        #10000;
+        #1000;
         phase.drop_objection(this);
 endtask
 endclass

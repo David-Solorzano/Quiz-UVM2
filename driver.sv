@@ -27,7 +27,6 @@ class driver extends uvm_driver #(trans_fifo);
         super.run_phase(phase);
             @(posedge vif.clk);
         vif.rst=1;
-	$display("Hola\n");
 
         @(posedge vif.clk);
         forever begin
@@ -39,6 +38,7 @@ class driver extends uvm_driver #(trans_fifo);
             espera = 0;
             @(posedge vif.clk);
             seq_item_port.get_next_item(item);
+	    item.print();
             driver_item(item);
 	    seq_item_port.item_done();
 
@@ -72,8 +72,9 @@ class driver extends uvm_driver #(trans_fifo);
 	     driver_aport.write(transaction); 
 	   end
 	  default: begin
-	    $display("[%g] Driver Error: la transacción recibida no tiene tipo valido",$time);
-	    $finish;
+		`uvm_error("DRIVER", "Wrong type transaction")
+		$finish;
+
 	     end 
 	    endcase    
 	    @(posedge vif.clk);
