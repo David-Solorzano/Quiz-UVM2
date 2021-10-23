@@ -1,6 +1,6 @@
 import uvm_pkg::*;
 
-class env extends uvm_env;
+class env #(parameter width =16, parameter depth = 8) extends uvm_env;
 
     `uvm_component_utils(env)
 
@@ -9,9 +9,9 @@ class env extends uvm_env;
     endfunction
 	
 	//Agente
-    agent agent_inst;
+    agent #(.width(width),.depth(depth)) agent_inst;
 	//Scoreboard
-    scoreboard scoreboard_inst;
+    scoreboard #(.width(width),.depth(depth)) scoreboard_inst;
 	
 
     virtual function void build_phase(uvm_phase phase);

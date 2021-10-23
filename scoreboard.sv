@@ -1,10 +1,8 @@
 
 import uvm_pkg::*;
 
-class scoreboard extends uvm_scoreboard;
+class scoreboard #(parameter width =16, parameter depth = 8) extends uvm_scoreboard;
   `uvm_component_utils(scoreboard)
-   parameter width = 16;
-   parameter depth = 8;
   // Puerto de transacciones del driver
   uvm_analysis_imp #(trans_fifo, scoreboard) m_analysis_imp;
 

@@ -7,12 +7,12 @@ class base_test extends uvm_test;
         super.new(name, parent);
     endfunction
 
-    env e0;
+    env #(.width(width),.depth(depth)) e0;
     virtual fifo_if vif;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        e0 = env::type_id::create("e0", this);
+        e0 = env#(.width(width),.depth(depth))::type_id::create("e0", this);
 		// Se toma interfaz
         if(!uvm_config_db#(virtual fifo_if)::get(this, "", "_if", vif))
             `uvm_fatal("Test", "Could not get vif")

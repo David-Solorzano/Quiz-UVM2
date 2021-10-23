@@ -1,8 +1,6 @@
 // Driver
-class driver extends uvm_driver #(trans_fifo);
+class driver #(parameter width =16) extends uvm_driver #(trans_fifo);
     `uvm_component_utils(driver)
-
-    localparam width = 16;
     
     int espera;
 
