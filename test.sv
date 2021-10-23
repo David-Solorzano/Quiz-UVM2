@@ -21,12 +21,12 @@ class base_test extends uvm_test;
     endfunction
 endclass
 
-class test_espec extends base_test;
-    `uvm_component_utils(test_espec)
+class test_especifico extends base_test;
+    `uvm_component_utils(test_especifico)
 
     int width = 16;
 
-    function new(string name = "test_espec", uvm_component parent = null);
+    function new(string name = "test_especifico", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
@@ -36,6 +36,9 @@ class test_espec extends base_test;
 
     virtual task run_phase(uvm_phase phase);
         trans_especifica trans_especifica_inst = trans_especifica::type_id::create("trans_especifica_inst");
+
+        `uvm_info("ESPECIFIC TEST", $sformatf("\n Especific test started\n"), UVM_HIGH)
+
         phase.raise_objection(this);
 
         trans_especifica_inst.ret_spec = 3;
@@ -43,17 +46,16 @@ class test_espec extends base_test;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
         
-
         trans_especifica_inst.ret_spec = 8;
         trans_especifica_inst.dto_spec = 16'hA;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
-    
+
         trans_especifica_inst.ret_spec = 10;
         trans_especifica_inst.dto_spec = 16'hFF;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
-   
+
         trans_especifica_inst.ret_spec = 10;
         trans_especifica_inst.tpo_spec = lectura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
@@ -61,4 +63,42 @@ class test_espec extends base_test;
         #1000;
         phase.drop_objection(this);
 endtask
+endclass
+
+class test_normal extends base_test;
+    `uvm_component_utils(test_normal)
+
+    int width = 16;
+
+    function new(string name = "test_normal", uvm_component parent = null);
+        super.new(name, parent);
+    endfunction
+
+    virtual function void build_phase(uvm_phase phase);
+    	super.build_phase(phase);
+    endfunction
+
+    virtual task run_phase(uvm_phase phase);
+        llenado_aleatorio llenado_aleatorio_inst = llenado_aleatorio::type_id::create("trans_especifica_inst");
+        trans_aleatoria trans_aleatoria_inst = trans_aleatoria::type_id::create("trans_aleatoria_inst");
+        trans_especifica trans_especifica_inst = trans_especifica::type_id::create("trans_especifica_inst");
+        sec_trans_aleatorias sec_trans_aleatorias_inst = sec_trans_aleatorias::type_id::create("sec_trans_aleatorias_inst");
+
+        `uvm_info("NORMAL TEST", $sformatf("\n Normal test started\n"), UVM_HIGH)
+
+        phase.raise_objection(this);
+
+        llenado_aleatorio_inst.start(eo.agent_inst.sequencer_inst);
+
+        trans_aleatoria_inst.start(eo.agent_inst.sequencer_inst);
+
+        trans_especifica_inst.ret_spec = 3;
+        trans_especifica_inst.tpo_spec = escritura;
+        trans_especifica_inst.dto_spec = 'h5;
+        trans_especifica_inst.start(eo.agent_inst.sequencer_inst);
+
+        sec_trans_aleatorias_inst.start("eo.agent_inst.sequencer_inst");
+        #1000;
+        phase.drop_objection(this);
+    endtask
 endclass

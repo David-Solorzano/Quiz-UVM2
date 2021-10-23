@@ -38,9 +38,9 @@ class driver extends uvm_driver #(trans_fifo);
             espera = 0;
             @(posedge vif.clk);
             seq_item_port.get_next_item(item);
-	    item.print();
+            `uvm_info("DRIVER", $sformatf("\nItem receive \n %s", item.sprint()), UVM_HIGH)
             driver_item(item);
-	    seq_item_port.item_done();
+	        seq_item_port.item_done();
 
         end
     endtask
@@ -60,16 +60,19 @@ class driver extends uvm_driver #(trans_fifo);
 	     @(posedge vif.clk);
 	     vif.pop = 1;
 	     driver_aport.write(transaction);
+         `uvm_info("DRIVER", $sformatf("\nItem send to scoreboard \n %s", transaction.sprint()), UVM_HIGH)
 	   end
 	   escritura: begin
 	     vif.push = 1;
 	     transaction.tiempo = $time;
-	     driver_aport.write(transaction); 
+	     driver_aport.write(transaction);
+         `uvm_info("DRIVER", $sformatf("\nItem send to scoreboard \n %s", transaction.sprint()), UVM_HIGH)
 	   end
 	   reset: begin
 	     vif.rst =1;
 	     transaction.tiempo = $time;
-	     driver_aport.write(transaction); 
+	     driver_aport.write(transaction);
+         `uvm_info("DRIVER", $sformatf("\nItem send to scoreboard \n %s", transaction.sprint()), UVM_HIGH) 
 	   end
 	  default: begin
 		`uvm_error("DRIVER", "Wrong type transaction")

@@ -1,5 +1,7 @@
 class trans_aleatoria extends uvm_sequence;
-    `uvm_object_utils(trans_aleatoria)
+    `uvm_object_utils_begin(trans_aleatoria)
+        `uvm_field_int(max_retardo, UVM_DEFAULT|UVM_DEC)
+    `uvm_object_utils_end
 
     int max_retardo = 10;
 
@@ -8,6 +10,7 @@ class trans_aleatoria extends uvm_sequence;
     endfunction
 
     virtual task body();
+        `uvm_info("SEQUENCE", $sformatf("\nRandom transaction created\n %s\n", this.sprint()), UVM_HIGH)
         trans_fifo item = trans_fifo::type_id::create("item");
         start_item(item);
         if(item.randomize()) begin
@@ -21,7 +24,10 @@ class trans_aleatoria extends uvm_sequence;
 endclass
 
 class sec_trans_aleatorias extends uvm_sequence;
-    `uvm_object_utils(sec_trans_aleatorias)
+    `uvm_object_utils_begin(sec_trans_aleatorias)
+        `uvm_field_int(num_transacciones, UVM_DEFAULT|UVM_DEC)
+        `uvm_field_int(max_retardo, UVM_DEFAULT|UVM_DEC)
+    `uvm_object_utils_end
 
     int num_transacciones = 2;
     int max_retardo = 10;
@@ -31,6 +37,7 @@ class sec_trans_aleatorias extends uvm_sequence;
     endfunction
 
     virtual task body();
+        `uvm_info("SEQUENCE", $sformatf("\nSec random transactions created\n %s\n", this.sprint()), UVM_HIGH)
         for(int i = 0; i<num_transacciones; i++) begin
             trans_fifo item = trans_fifo::type_id::create("item");
             start_item(item);
@@ -47,7 +54,11 @@ endclass
 
 
 class trans_especifica extends uvm_sequence;
-    `uvm_object_utils(trans_especifica)
+    `uvm_object_utils_begin(trans_especifica)
+        `uvm_field_int(dto_spec, UVM_DEFAULT)
+        `uvm_field_enum(tipo_trans, tpo_spec, UVM_DEFAULT)
+        `uvm_field_int(ret_spec, UVM_DEFAULT|UVM_DEC)
+    `uvm_object_utils_end
 
     tipo_trans tpo_spec;
     bit [width-1:0] dto_spec;
@@ -58,6 +69,7 @@ class trans_especifica extends uvm_sequence;
     endfunction
 
     virtual task body();
+        `uvm_info("SEQUENCE", $sformatf("\nEspecific transaction created\n %s\n", this.sprint()), UVM_HIGH)
         trans_fifo item = trans_fifo::type_id::create("item");
         start_item(item);
         item.tipo = this.tpo_spec;
@@ -70,7 +82,13 @@ class trans_especifica extends uvm_sequence;
 endclass
 
 class llenado_aleatorio extends uvm_sequence;
-    `uvm_object_utils(llenado_aleatorio)
+    `uvm_object_utils_begin(llenado_aleatorio)
+        `uvm_field_enum(tipo_trans, tpo_spec, UVM_DEFAULT)
+        `uvm_field_int(dto_spec, UVM_DEFAULT)
+        `uvm_field_int(ret_spec, UVM_DEFAULT|UVM_DEC)
+        `uvm_field_int(num_transacciones, UVM_DEFAULT|UVM_DEC)
+        `uvm_field_int(max_retardo, UVM_DEFAULT|UVM_DEC)
+    `uvm_object_utils_end
 
     int num_transacciones = 2;
     tipo_trans tpo_spec;
@@ -83,6 +101,7 @@ class llenado_aleatorio extends uvm_sequence;
     endfunction
 
     virtual task body();
+        `uvm_info("SEQUENCE", $sformatf("\nLlenado aleatorio creado\n %s\n", this.sprint()), UVM_HIGH)
         for(int i = 0; i<num_transacciones; i++) begin
             trans_fifo item = trans_fifo::type_id::create("item");
             start_item(item);

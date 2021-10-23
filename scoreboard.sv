@@ -36,7 +36,7 @@ class scoreboard extends uvm_scoreboard;
   endfunction
 
   virtual function void write(trans_fifo transaccion);
-   $display("[%g]  El checker fue inicializado",$time);
+    `uvm_info("SCOREBOARD", $sformatf("\nTransaction received\n%s\n", transaccion.sprint()), UVM_DEBUG)
      to_sb = trans_sb::type_id::create("trans_sb");
      case(transaccion.tipo)
        lectura: begin
@@ -54,8 +54,8 @@ class scoreboard extends uvm_scoreboard;
             end
              score_board.push_back(to_sb);
            end else begin
-            $display("Dato_leido= %h, Dato_Esperado = %h",transaccion.dato,auxiliar.dato);
-            $finish; 
+              `uvm_error("SCOREBOARD", $sformatf("Dato_leido= %h, Dato_Esperado = %h",transaccion.dato,auxiliar.dato));
+              $finish; 
            end
          end else begin // si está vacía genera un underflow 
              to_sb.tiempo_pop = transaccion.tiempo;
@@ -99,7 +99,7 @@ class scoreboard extends uvm_scoreboard;
          end
        end
        default: begin
-         `uvm_error("SCOREBOARD", $sformatf("[%g] Checker Error: la transacción recibida no tiene tipo valido",$time));
+         `uvm_error("SCOREBOARD", $sformatf("La transacción recibida no tiene tipo valido",$time));
          $finish;
        end
      endcase    
