@@ -37,10 +37,11 @@ module test_bench;
     .rst(_if.rst)
   );
 
+
   initial begin
     uvm_top.enable_print_topology = 1;
 
-    uvm_top.set_report_verbosity_level(UVM_DEBUG);
+    uvm_top.set_report_verbosity_level(UVM_LOW);
 
     uvm_config_db #(virtual fifo_if)::set(null, "uvm_test_top", "_if", _if);
 

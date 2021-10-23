@@ -42,7 +42,7 @@ class test_especifico extends base_test;
         phase.raise_objection(this);
 
         trans_especifica_inst.ret_spec = 3;
-        trans_especifica_inst.ret_spec = 'h55;
+        trans_especifica_inst.dto_spec = 'h55;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
         
@@ -79,7 +79,7 @@ class test_normal extends base_test;
     endfunction
 
     virtual task run_phase(uvm_phase phase);
-        llenado_aleatorio llenado_aleatorio_inst = llenado_aleatorio::type_id::create("trans_especifica_inst");
+        llenado_aleatorio llenado_aleatorio_inst = llenado_aleatorio::type_id::create("llenado_aleatorio_inst");
         trans_aleatoria trans_aleatoria_inst = trans_aleatoria::type_id::create("trans_aleatoria_inst");
         trans_especifica trans_especifica_inst = trans_especifica::type_id::create("trans_especifica_inst");
         sec_trans_aleatorias sec_trans_aleatorias_inst = sec_trans_aleatorias::type_id::create("sec_trans_aleatorias_inst");
@@ -88,16 +88,16 @@ class test_normal extends base_test;
 
         phase.raise_objection(this);
 
-        llenado_aleatorio_inst.start(eo.agent_inst.sequencer_inst);
+        llenado_aleatorio_inst.start(e0.agent_inst.sequencer_inst);
 
-        trans_aleatoria_inst.start(eo.agent_inst.sequencer_inst);
+        trans_aleatoria_inst.start(e0.agent_inst.sequencer_inst);
 
         trans_especifica_inst.ret_spec = 3;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.dto_spec = 'h5;
-        trans_especifica_inst.start(eo.agent_inst.sequencer_inst);
+        trans_especifica_inst.start(e0.agent_inst.sequencer_inst);
 
-        sec_trans_aleatorias_inst.start("eo.agent_inst.sequencer_inst");
+        sec_trans_aleatorias_inst.start(e0.agent_inst.sequencer_inst);
         #1000;
         phase.drop_objection(this);
     endtask

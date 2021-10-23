@@ -39,7 +39,7 @@ class driver extends uvm_driver #(trans_fifo);
             @(posedge vif.clk);
             seq_item_port.get_next_item(item);
             `uvm_info("DRIVER", $sformatf("\nItem receive \n %s", item.sprint()), UVM_HIGH)
-            driver_item(item);
+           driver_item(item);
 	        seq_item_port.item_done();
 
         end
@@ -47,7 +47,6 @@ class driver extends uvm_driver #(trans_fifo);
 	
 	// La señal en base al seq_item
     virtual task driver_item(trans_fifo #(.width(width)) transaction);
-
         while(this.espera < transaction.retardo)begin
           @(posedge vif.clk);
           this.espera = this.espera+1;

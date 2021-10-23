@@ -55,7 +55,7 @@ class scoreboard extends uvm_scoreboard;
              score_board.push_back(to_sb);
            end else begin
               `uvm_error("SCOREBOARD", $sformatf("Dato_leido= %h, Dato_Esperado = %h",transaccion.dato,auxiliar.dato));
-              $finish; 
+              //$finish; 
            end
          end else begin // si está vacía genera un underflow 
              to_sb.tiempo_pop = transaccion.tiempo;
