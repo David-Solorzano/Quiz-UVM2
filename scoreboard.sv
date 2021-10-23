@@ -3,7 +3,8 @@ import uvm_pkg::*;
 
 class scoreboard extends uvm_scoreboard;
   `uvm_component_utils(scoreboard)
-
+   parameter width = 16;
+   parameter depth = 8;
   // Puerto de transacciones del driver
   uvm_analysis_imp #(trans_fifo, scoreboard) m_analysis_imp;
 
@@ -12,6 +13,8 @@ class scoreboard extends uvm_scoreboard;
   int tamano_sb = 0;
   trans_sb score_board[$]; // esta es la estructura dinámica que maneja el scoreboard  
   int transacciones_completadas = 0;
+  int retardo_total = 0;
+  int retardo_promedio = 0;
 
   trans_fifo #(.width(width)) transaccion; //transacción recibida en el mailbox 
   trans_fifo #(.width(width)) auxiliar; //transacción usada como auxiliar para leer el fifo emulado 
@@ -27,13 +30,14 @@ class scoreboard extends uvm_scoreboard;
     this.contador_auxiliar = 0;
   endfunction 
 
-  virtual function write(trans_fifo t);
+  virtual function void build_phase(uvm_phase phase);
+	super.build_phase(phase);
+	m_analysis_imp = new("m_analysis_imp", this);
+  endfunction
+
+  virtual function void write(trans_fifo transaccion);
    $display("[%g]  El checker fue inicializado",$time);
-   to_sb = new();
-   forever begin
      to_sb = trans_sb::type_id::create("trans_sb");
-     drv_chkr_mbx.get(transaccion);
-     transaccion.print("Checker: Se recibe trasacción desde el driver");
      case(transaccion.tipo)
        lectura: begin
          if(0 !== emul_fifo.size()) begin //Revisa si el Fifo no está vacía
@@ -44,21 +48,18 @@ class scoreboard extends uvm_scoreboard;
              to_sb.tiempo_pop = transaccion.dato;
              to_sb.completado = 1;
              to_sb.calc_latencia();
-             to_sb.print("Checker:Transaccion Completada");
             if(to_sb.completado) begin
              retardo_total = retardo_total + to_sb.latencia;
              transacciones_completadas++;
             end
              score_board.push_back(to_sb);
            end else begin
-             transaccion.print("Checker: Error el dato de la transacción no calza con el esperado");
             $display("Dato_leido= %h, Dato_Esperado = %h",transaccion.dato,auxiliar.dato);
             $finish; 
            end
          end else begin // si está vacía genera un underflow 
              to_sb.tiempo_pop = transaccion.tiempo;
              to_sb.underflow = 1;
-             to_sb.print("Checker: Underflow");
              if(to_sb.completado) begin
               retardo_total = retardo_total + to_sb.latencia;
               transacciones_completadas++;
@@ -72,7 +73,6 @@ class scoreboard extends uvm_scoreboard;
            to_sb.dato_enviado = auxiliar.dato;
            to_sb.tiempo_push = auxiliar.tiempo;
            to_sb.overflow = 1;
-           to_sb.print("Checker: Overflow");
            if(to_sb.completado) begin
             retardo_total = retardo_total + to_sb.latencia;
             transacciones_completadas++;
@@ -80,7 +80,6 @@ class scoreboard extends uvm_scoreboard;
            score_board.push_back(to_sb);
            emul_fifo.push_back(transaccion);
          end else begin  // En caso de no estar llena simplemente guarda el dato en la fifo simulada
-           transaccion.print("Checker: Escritura");
            emul_fifo.push_back(transaccion);
          end
        end
@@ -92,7 +91,6 @@ class scoreboard extends uvm_scoreboard;
            to_sb.dato_enviado = auxiliar.dato;
            to_sb.tiempo_push = auxiliar.tiempo;
            to_sb.reset = 1;
-           to_sb.print("Checker: Reset");
            if(to_sb.completado) begin
             retardo_total = retardo_total + to_sb.latencia;
             transacciones_completadas++;
@@ -105,7 +103,6 @@ class scoreboard extends uvm_scoreboard;
          $finish;
        end
      endcase    
-   end 
   endfunction
 
     virtual function void report_phase(uvm_phase phase);
@@ -122,4 +119,3 @@ class scoreboard extends uvm_scoreboard;
 endclass 
 
 
-import uvm_pkg::*;

@@ -1,8 +1,11 @@
+typedef enum { lectura, escritura, reset} tipo_trans; 
+
+
 class trans_fifo #(parameter width = 16) extends uvm_sequence_item;
 
   `uvm_object_utils_begin(trans_fifo)
     `uvm_field_int(retardo, UVM_DEFAULT)
-    `uvm_field_ENUM(tipo, UVM_DEFAULT)
+    `uvm_field_enum(tipo_trans, tipo, UVM_DEFAULT)
 	  `uvm_field_int(dato, UVM_DEFAULT)
     `uvm_field_int(tiempo, UVM_DEFAULT)
   `uvm_object_utils_end

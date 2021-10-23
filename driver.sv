@@ -1,6 +1,10 @@
 // Driver
-class driver extends uvm_driver #(transaction_item);
+class driver extends uvm_driver #(trans_fifo);
     `uvm_component_utils(driver)
+
+    localparam width = 16;
+    
+    int espera;
 
     uvm_analysis_port #(trans_fifo #(.width(width))) driver_aport;
 
@@ -13,8 +17,9 @@ class driver extends uvm_driver #(transaction_item);
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        if(!uvm_config_db#(virtual if_dut)::get(this, "", "_if", vif))
+        if(!uvm_config_db#(virtual fifo_if)::get(this, "", "_if", vif))
             `uvm_fatal("Driver", "Could not get vif")
+    	driver_aport = new("driver_aport", this);
     endfunction
 	
 	// Cada transaccion que recibe
@@ -22,6 +27,8 @@ class driver extends uvm_driver #(transaction_item);
         super.run_phase(phase);
             @(posedge vif.clk);
         vif.rst=1;
+	$display("Hola\n");
+
         @(posedge vif.clk);
         forever begin
             trans_fifo #(.width(width)) item;
@@ -40,12 +47,10 @@ class driver extends uvm_driver #(transaction_item);
 	
 	// La señal en base al seq_item
     virtual task driver_item(trans_fifo #(.width(width)) transaction);
-        transaction.print("Driver: Transaccion recibida");
-        $display("Transacciones pendientes en el mbx agnt_drv = %g",agnt_drv_mbx.num());
 
-        while(espera < transaction.retardo)begin
+        while(this.espera < transaction.retardo)begin
           @(posedge vif.clk);
-          espera = espera+1;
+          this.espera = this.espera+1;
           vif.dato_in = transaction.dato;
 	end
         case(transaction.tipo)
@@ -55,19 +60,16 @@ class driver extends uvm_driver #(transaction_item);
 	     @(posedge vif.clk);
 	     vif.pop = 1;
 	     driver_aport.write(transaction);
-	     transaction.print("Driver: Transaccion ejecutada");
 	   end
 	   escritura: begin
 	     vif.push = 1;
 	     transaction.tiempo = $time;
 	     driver_aport.write(transaction); 
-	     transaction.print("Driver: Transaccion ejecutada");
 	   end
 	   reset: begin
 	     vif.rst =1;
 	     transaction.tiempo = $time;
 	     driver_aport.write(transaction); 
-	     transaction.print("Driver: Transaccion ejecutada");
 	   end
 	  default: begin
 	    $display("[%g] Driver Error: la transacción recibida no tiene tipo valido",$time);

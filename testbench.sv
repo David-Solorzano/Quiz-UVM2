@@ -1,3 +1,10 @@
+import uvm_pkg::*;
+
+
+  parameter width = 16;
+  parameter depth = 8;
+
+
 `include "fifo.sv"
 `include "interface.sv"
 `include "seq_item.sv"
@@ -13,13 +20,10 @@
 ///////////////////////////////////
 module test_bench; 
   reg clk;
-  parameter width = 16;
-  parameter depth = 8;
-
   fifo_if  #(.width(width)) _if(.clk(clk));
   initial begin
     clk = 0;
-    forever #5 clk = ~clk;
+    forever #5 clk = ~ clk;
   end
 
   fifo_flops #(.depth(depth),.bits(width)) uut(
@@ -38,7 +42,7 @@ module test_bench;
 
     uvm_top.set_report_verbosity_level(UVM_LOW);
 
-    uvm_config_db #(virtual if_dut)::set(null, "uvm_test_top", "_if", _if);
+    uvm_config_db #(virtual fifo_if)::set(null, "uvm_test_top", "_if", _if);
 
     run_test();
   end

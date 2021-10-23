@@ -3,7 +3,6 @@ class agent extends uvm_agent;
     `uvm_component_utils(agent)
     
     driver driver_inst;
-    monitor monitor_inst;
     uvm_sequencer #(trans_fifo) sequencer_inst;
 
     function new(string name = "agent", uvm_component parent = null);
@@ -15,7 +14,7 @@ class agent extends uvm_agent;
 		//Driver
         driver_inst = driver::type_id::create("driver_inst", this);
 		//Secuenciador
-        sequencer_inst = uvm_sequencer #(transaction_item)::type_id::create("sequencer_inst", this);
+        sequencer_inst = uvm_sequencer #(trans_fifo)::type_id::create("sequencer_inst", this);
     endfunction
 
     virtual function void connect_phase(uvm_phase phase);

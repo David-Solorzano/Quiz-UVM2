@@ -3,7 +3,7 @@ class trans_aleatoria extends uvm_sequence;
 
     int max_retardo = 10;
 
-    function new(name = "trans_aleatoria");
+    function new(string name = "trans_aleatoria");
         super.new(name);
     endfunction
 
@@ -26,7 +26,7 @@ class sec_trans_aleatorias extends uvm_sequence;
     int num_transacciones = 2;
     int max_retardo = 10;
 
-    function new(name = "sec_trans_aleatorias");
+    function new(string name = "sec_trans_aleatorias");
         super.new(name);
     endfunction
 
@@ -53,7 +53,7 @@ class trans_especifica extends uvm_sequence;
     bit [width-1:0] dto_spec;
     int ret_spec;
 
-    function new(name = "trans_especifica");
+    function new(string name = "trans_especifica");
         super.new(name);
     endfunction
 
@@ -72,12 +72,13 @@ endclass
 class llenado_aleatorio extends uvm_sequence;
     `uvm_object_utils(llenado_aleatorio)
 
+    int num_transacciones = 2;
     tipo_trans tpo_spec;
     bit [width-1:0] dto_spec;
     int ret_spec;
     int max_retardo = 10;
 
-    function new(name = "llenado_aleatorio");
+    function new(string name = "llenado_aleatorio");
         super.new(name);
     endfunction
 
