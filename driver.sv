@@ -25,7 +25,7 @@ class driver #(parameter width =16) extends uvm_driver #(trans_fifo);
         super.run_phase(phase);
             @(posedge vif.clk);
         vif.rst=1;
-
+        // Logica que corre continuamente
         @(posedge vif.clk);
         forever begin
             trans_fifo #(.width(width)) item;
@@ -35,6 +35,7 @@ class driver #(parameter width =16) extends uvm_driver #(trans_fifo);
             vif.dato_in = 0;
             espera = 0;
             @(posedge vif.clk);
+            // Se extrae nuevo item
             seq_item_port.get_next_item(item);
             `uvm_info("DRIVER", $sformatf("\nItem receive \n %s", item.sprint()), UVM_HIGH)
            driver_item(item);
@@ -43,13 +44,14 @@ class driver #(parameter width =16) extends uvm_driver #(trans_fifo);
         end
     endtask
 	
-	// La señal en base al seq_item
+	// Funcion para realizar acciones con cada dato
     virtual task driver_item(trans_fifo #(.width(width)) transaction);
         while(this.espera < transaction.retardo)begin
           @(posedge vif.clk);
           this.espera = this.espera+1;
           vif.dato_in = transaction.dato;
 	end
+        // Case tomado de archivo original
         case(transaction.tipo)
 	  lectura: begin
 	     transaction.dato = vif.dato_out;

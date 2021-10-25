@@ -1,3 +1,4 @@
+// Transaccion aleatorias
 class trans_aleatoria extends uvm_sequence;
     `uvm_object_utils_begin(trans_aleatoria)
         `uvm_field_int(max_retardo, UVM_DEFAULT|UVM_DEC)
@@ -23,6 +24,7 @@ class trans_aleatoria extends uvm_sequence;
 
 endclass
 
+// Secuencia de transacciones aleatorias
 class sec_trans_aleatorias extends uvm_sequence;
     `uvm_object_utils_begin(sec_trans_aleatorias)
         `uvm_field_int(num_transacciones, UVM_DEFAULT|UVM_DEC)
@@ -52,7 +54,7 @@ class sec_trans_aleatorias extends uvm_sequence;
 
 endclass
 
-
+// Transaccion especifica
 class trans_especifica extends uvm_sequence;
     `uvm_object_utils_begin(trans_especifica)
         `uvm_field_int(dto_spec, UVM_DEFAULT)
@@ -81,6 +83,7 @@ class trans_especifica extends uvm_sequence;
 
 endclass
 
+// Transacción de llenado aleatorio
 class llenado_aleatorio extends uvm_sequence;
     `uvm_object_utils_begin(llenado_aleatorio)
         `uvm_field_enum(tipo_trans, tpo_spec, UVM_DEFAULT)
@@ -102,6 +105,7 @@ class llenado_aleatorio extends uvm_sequence;
 
     virtual task body();
         `uvm_info("SEQUENCE", $sformatf("\nLlenado aleatorio creado\n %s\n", this.sprint()), UVM_HIGH)
+        // Primero se crean transacciones de escritura
         for(int i = 0; i<num_transacciones; i++) begin
             trans_fifo item = trans_fifo::type_id::create("item");
             start_item(item);
@@ -114,6 +118,7 @@ class llenado_aleatorio extends uvm_sequence;
             `uvm_info("SEQ", $sformatf("\nNew item: \n %s", item.sprint()), UVM_MEDIUM)
             finish_item(item);
         end
+        // Se crean transacciones de lectura
         for(int i = 0; i<num_transacciones; i++) begin
             trans_fifo item = trans_fifo::type_id::create("item");
             start_item(item);

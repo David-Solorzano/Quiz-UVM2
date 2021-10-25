@@ -1,5 +1,6 @@
 import uvm_pkg::*;
 
+// Test base con la configuración de environment y la interfaz
 class base_test extends uvm_test;
     `uvm_component_utils(base_test)
 
@@ -21,6 +22,7 @@ class base_test extends uvm_test;
     endfunction
 endclass
 
+// Test que hereda del base con transacciones específicas
 class test_especifico extends base_test;
     `uvm_component_utils(test_especifico)
 
@@ -65,6 +67,7 @@ class test_especifico extends base_test;
 endtask
 endclass
 
+// Test que hereda del base con las transacciones originales
 class test_normal extends base_test;
     `uvm_component_utils(test_normal)
 
@@ -88,10 +91,13 @@ class test_normal extends base_test;
 
         phase.raise_objection(this);
 
+        // Llenado aleatorio
         llenado_aleatorio_inst.start(e0.agent_inst.sequencer_inst);
 
+        // Transacción aleatoria
         trans_aleatoria_inst.start(e0.agent_inst.sequencer_inst);
 
+        // Escritura de 0x5
         trans_especifica_inst.ret_spec = 3;
         trans_especifica_inst.tpo_spec = escritura;
         trans_especifica_inst.dto_spec = 'h5;

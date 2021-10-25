@@ -1,6 +1,7 @@
 
 import uvm_pkg::*;
 
+// Union de checker scoreboard, se le añaden colas del scoreboard
 class scoreboard #(parameter width =16, parameter depth = 8) extends uvm_scoreboard;
   `uvm_component_utils(scoreboard)
   // Puerto de transacciones del driver
@@ -105,6 +106,7 @@ class scoreboard #(parameter width =16, parameter depth = 8) extends uvm_scorebo
 
     virtual function void report_phase(uvm_phase phase);
 		// Reporte de misses y matches al final de la corrida
+    // Se realiza el reporte al igual que con el scoreboard original
     	super.report_phase(phase);
         tamano_sb = this.score_board.size();
             for(int i=0;i<tamano_sb;i++) begin

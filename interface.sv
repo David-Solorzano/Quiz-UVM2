@@ -1,3 +1,4 @@
+// Interfaz original
 interface fifo_if #(parameter width =16) (
   input clk
 );
